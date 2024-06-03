@@ -23,6 +23,10 @@ public class ProjetoService {
 		return projetoRepository.save(projeto);
 	}
 	
+    public Optional<Projeto> findByDescricao(String descricao) {
+        return projetoRepository.findByProjetoDescricao(descricao);
+    }
+	
 	public Projeto updateProjeto(Integer id, Projeto projeto) {
 		Projeto projetoAtualizado = projetoRepository.findById(id).orElse(null);
 		if(projetoAtualizado != null) {

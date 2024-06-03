@@ -1,6 +1,7 @@
 package com.projeto.integrado.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.integrado.entity.Recurso;
@@ -40,6 +42,13 @@ public class RecursoController {
 		else 
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);		
 	}
+	
+    @GetMapping("/buscarPorNome")
+    public ResponseEntity<Recurso> buscarPorNome(@RequestParam String nome) {
+        Optional<Recurso> recurso = recursoService.findByNome(nome);
+        return recurso.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    }
 	
 	@PostMapping
 	public ResponseEntity<Recurso> saveRecurso(@RequestBody Recurso recurso) {

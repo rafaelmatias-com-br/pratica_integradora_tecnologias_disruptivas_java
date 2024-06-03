@@ -1,6 +1,7 @@
 package com.projeto.integrado.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.integrado.entity.Projeto;
@@ -31,6 +33,13 @@ public class ProjetoController {
 		else 
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
+	
+    @GetMapping("/buscarPorDescricao")
+    public ResponseEntity<Projeto> buscarPorDescricao(@RequestParam String descricao) {
+        Optional<Projeto> projeto = projetoService.findByDescricao(descricao);
+        return projeto.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    }
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Projeto> getById(@PathVariable Integer id) {
